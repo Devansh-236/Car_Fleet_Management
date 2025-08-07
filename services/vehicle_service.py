@@ -7,7 +7,6 @@ from fastapi import HTTPException, status
 class VehicleService:
     @staticmethod
     def create_vehicle(vehicle_data: VehicleCreate) -> Vehicle:
-        # Check if vehicle already exists
         existing = VehicleService.get_vehicle(vehicle_data.vin)
         if existing:
             raise HTTPException(
@@ -29,8 +28,7 @@ class VehicleService:
         )
         
         vehicle_id = execute_insert(query, params)
-        return VehicleService.get_vehicle_by_id(vehicle_id)
-    
+        return VehicleService.get_vehicle_by_id(vehicle_id) 
     @staticmethod
     def get_vehicle(vin: str) -> Optional[Vehicle]:
         query = "SELECT * FROM vehicles WHERE vin = ?"
@@ -48,7 +46,6 @@ class VehicleService:
                 created_at=datetime.fromisoformat(row['created_at'])
             )
         return None
-    
     @staticmethod
     def get_vehicle_by_id(vehicle_id: int) -> Optional[Vehicle]:
         query = "SELECT * FROM vehicles WHERE id = ?"
@@ -66,7 +63,6 @@ class VehicleService:
                 created_at=datetime.fromisoformat(row['created_at'])
             )
         return None
-    
     @staticmethod
     def get_all_vehicles() -> List[Vehicle]:
         query = "SELECT * FROM vehicles ORDER BY created_at DESC"
@@ -84,13 +80,11 @@ class VehicleService:
                 created_at=datetime.fromisoformat(row['created_at'])
             ))
         return vehicles
-    
     @staticmethod
     def delete_vehicle(vin: str) -> bool:
         query = "DELETE FROM vehicles WHERE vin = ?"
         affected_rows = execute_update(query, (vin,))
         return affected_rows > 0
-    
     @staticmethod
     def get_vehicles_by_fleet(fleet_id: str) -> List[Vehicle]:
         query = "SELECT * FROM vehicles WHERE fleet_id = ? ORDER BY created_at DESC"
@@ -108,5 +102,4 @@ class VehicleService:
                 created_at=datetime.fromisoformat(row['created_at'])
             ))
         return vehicles
-
 vehicle_service = VehicleService()

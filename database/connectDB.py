@@ -119,4 +119,3 @@ def execute_update(query: str, params: tuple = ()) -> int:
         conn.commit()
         return cursor.rowcount
 
-create_database_schema()
