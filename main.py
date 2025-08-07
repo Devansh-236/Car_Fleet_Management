@@ -1,11 +1,11 @@
 from fastapi import FastAPI
 from database.connectDB import init_database
-from api import vehicles, telemetry, alerts
+from api import vehicles, telemetry, alerts, alert_sender  
 from services.analytics_service import analytics_service
 
 app = FastAPI(
     title="Connected Car Fleet Management System",
-    description="A system for managing vehicle fleets and processing real-time telemetry data with SQLite3 database",
+    description="A system for managing vehicle fleets and processing real-time telemetry data with Alert Sender",
     version="1.0.0"
 )
 
@@ -18,14 +18,15 @@ def startup_event():
 app.include_router(vehicles.router)
 app.include_router(telemetry.router)
 app.include_router(alerts.router)
+app.include_router(alert_sender.router)  
 
 @app.get("/")
 async def root():
-    return {"message": "Connected Car Fleet Management System API with SQLite3"}
+    return {"message": "Connected Car Fleet Management System API with Alert Sender"}
 
 @app.get("/health")
 async def health_check():
-    return {"status": "healthy", "database": "SQLite3 connected"}
+    return {"status": "healthy", "database": "SQLite3 connected", "features": ["Alert Sender", "Deduplication"]}
 
 @app.get("/analytics")
 async def get_analytics():

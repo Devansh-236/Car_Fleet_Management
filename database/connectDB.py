@@ -65,7 +65,48 @@ def create_database_schema():
         # Indexes for alerts table
         "CREATE INDEX IF NOT EXISTS idx_alerts_alert_id ON alerts(alert_id)",
         "CREATE INDEX IF NOT EXISTS idx_alerts_vehicle_vin ON alerts(vehicle_vin)",
-        "CREATE INDEX IF NOT EXISTS idx_alerts_timestamp ON alerts(timestamp)"
+        "CREATE INDEX IF NOT EXISTS idx_alerts_timestamp ON alerts(timestamp)",
+
+
+        """
+        CREATE TABLE IF NOT EXISTS active_alerts (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            alert_sender_id TEXT UNIQUE NOT NULL,
+            vehicle_vin TEXT NOT NULL,
+            alert_type TEXT CHECK(alert_type IN ('speed_violation', 'low_fuel_battery')) NOT NULL,
+            severity TEXT CHECK(severity IN ('low', 'medium', 'high', 'critical')) NOT NULL,
+            title TEXT NOT NULL,
+            description TEXT NOT NULL,
+            status TEXT CHECK(status IN ('active', 'resolved', 'acknowledged')) DEFAULT 'active',
+            first_occurrence TIMESTAMP NOT NULL,
+            last_occurrence TIMESTAMP NOT NULL,
+            occurrence_count INTEGER DEFAULT 1,
+            resolved_at TIMESTAMP NULL,
+            resolved_by TEXT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (vehicle_vin) REFERENCES vehicles (vin) ON DELETE CASCADE
+        )
+        """,
+
+        "CREATE INDEX IF NOT EXISTS idx_active_alerts_sender_id ON active_alerts(alert_sender_id)",
+        "CREATE INDEX IF NOT EXISTS idx_active_alerts_vehicle_vin ON active_alerts(vehicle_vin)",
+        "CREATE INDEX IF NOT EXISTS idx_active_alerts_status ON active_alerts(status)",
+        "CREATE INDEX IF NOT EXISTS idx_active_alerts_type ON active_alerts(alert_type)",
+
+        """
+        CREATE TABLE IF NOT EXISTS alert_relationships (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            active_alert_id INTEGER NOT NULL,
+            raw_alert_id INTEGER NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (active_alert_id) REFERENCES active_alerts (id) ON DELETE CASCADE,
+            FOREIGN KEY (raw_alert_id) REFERENCES alerts (id) ON DELETE CASCADE,
+            UNIQUE(active_alert_id, raw_alert_id)
+        )
+        """,
+        
+        "CREATE INDEX IF NOT EXISTS idx_alert_relationships_active ON alert_relationships(active_alert_id)",
+        "CREATE INDEX IF NOT EXISTS idx_alert_relationships_raw ON alert_relationships(raw_alert_id)"
     ]
     
     with sqlite3.connect(DB_FILE) as conn:

@@ -3,6 +3,7 @@ from datetime import datetime
 import uuid
 from models.alert import Alert, AlertType, AlertSeverity, AlertResponse
 from database.connectDB import execute_query, execute_insert
+from services.alert_sender_service import alert_sender_service
 
 class AlertService:
     SPEED_LIMIT = 80.0  # km/h , taken as default speed limit
@@ -31,6 +32,16 @@ class AlertService:
             alert = AlertService.get_alert(alert_id)
             if alert:
                 alerts.append(alert)
+                # Process through Alert Sender
+                raw_alert_dict = {
+                    'id': alert.id,
+                    'vehicle_vin': alert.vehicle_vin,
+                    'alert_type': alert.alert_type,
+                    'severity': alert.severity,
+                    'message': alert.message,
+                    'timestamp': alert.timestamp
+                }
+                alert_sender_service.process_raw_alert(raw_alert_dict)
         
         # Low fuel/battery check
         if telemetry_data['fuel_battery_level'] < AlertService.LOW_FUEL_THRESHOLD:
@@ -52,6 +63,16 @@ class AlertService:
             alert = AlertService.get_alert(alert_id)
             if alert:
                 alerts.append(alert)
+                # Process through Alert Sender
+                raw_alert_dict = {
+                    'id': alert.id,
+                    'vehicle_vin': alert.vehicle_vin,
+                    'alert_type': alert.alert_type,
+                    'severity': alert.severity,
+                    'message': alert.message,
+                    'timestamp': alert.timestamp
+                }
+                alert_sender_service.process_raw_alert(raw_alert_dict)
         
         return alerts
     
