@@ -1,9 +1,9 @@
 from typing import List, Optional
 from datetime import datetime
-from app.models.telemetry import TelemetryCreate, TelemetryResponse
-from app.database.connection import execute_query, execute_insert
-from app.services.vehicle_service import vehicle_service
-from app.services.alert_service import alert_service
+from models.telemetry import TelemetryCreate, TelemetryResponse
+from database.connectDB import execute_query, execute_insert
+from services.vehicle_service import vehicle_service
+from services.alert_service import alert_service
 from fastapi import HTTPException, status
 
 class TelemetryService:

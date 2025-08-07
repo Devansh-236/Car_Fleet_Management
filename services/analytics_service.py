@@ -1,7 +1,7 @@
 from typing import Dict, Any
 from datetime import datetime, timedelta
 from collections import Counter
-from app.database.connection import execute_query
+from database.connectDB import execute_query
 
 class AnalyticsService:
     @staticmethod

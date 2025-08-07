@@ -1,7 +1,7 @@
 from typing import List, Optional
 from datetime import datetime
-from app.models.vehicle import Vehicle, VehicleCreate
-from app.database.connection import execute_query, execute_insert, execute_update
+from models.vehicle import Vehicle, VehicleCreate
+from database.connectDB import execute_query, execute_insert, execute_update
 from fastapi import HTTPException, status
 
 class VehicleService:

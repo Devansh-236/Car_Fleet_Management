@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, status, Query
 from typing import List
-from app.models.telemetry import TelemetryCreate, TelemetryResponse
-from app.services.telemetry_service import telemetry_service
+from models.telemetry import TelemetryCreate, TelemetryResponse
+from services.telemetry_service import telemetry_service
 
 router = APIRouter(prefix="/telemetry", tags=["telemetry"])
 

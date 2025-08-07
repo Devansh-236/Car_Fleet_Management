@@ -1,0 +1,4 @@
+*/**/.pyc
+*/**/__pycache__/
+fleet_management.db
+__pycache__/

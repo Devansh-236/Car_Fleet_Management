@@ -7,7 +7,6 @@ from typing import Generator
 DB_FILE = "fleet_management.db"
 
 def create_database_schema():
-    """Create all database tables with proper schema"""
     schema_queries = [
         # Vehicles table
         """
@@ -78,11 +77,9 @@ def create_database_schema():
     print(f"Database initialized at: {os.path.abspath(DB_FILE)}")
 
 def get_db_path() -> str:
-    """Get the full path to the database file"""
     return os.path.abspath(DB_FILE)
 
 def init_database():
-    """Initialize the database with schema"""
     create_database_schema()
 
 @contextmanager
@@ -100,20 +97,17 @@ def get_db_connection() -> Generator[sqlite3.Connection, None, None]:
         conn.close()
 
 def execute_query(query: str, params: tuple = ()) -> list:
-    """Execute a SELECT query and return results"""
     with get_db_connection() as conn:
         cursor = conn.execute(query, params)
         return [dict(row) for row in cursor.fetchall()]
 
 def execute_insert(query: str, params: tuple = ()) -> int:
-    """Execute an INSERT query and return the last row id"""
     with get_db_connection() as conn:
         cursor = conn.execute(query, params)
         conn.commit()
         return cursor.lastrowid
 
 def execute_update(query: str, params: tuple = ()) -> int:
-    """Execute an UPDATE/DELETE query and return affected rows"""
     with get_db_connection() as conn:
         cursor = conn.execute(query, params)
         conn.commit()

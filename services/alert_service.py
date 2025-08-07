@@ -1,8 +1,8 @@
 from typing import List, Optional
 from datetime import datetime
 import uuid
-from app.models.alert import Alert, AlertType, AlertSeverity, AlertResponse
-from app.database.connection import execute_query, execute_insert
+from models.alert import Alert, AlertType, AlertSeverity, AlertResponse
+from database.connectDB import execute_query, execute_insert
 
 class AlertService:
     SPEED_LIMIT = 80.0  # km/h , taken as default speed limit

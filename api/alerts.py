@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, status
 from typing import List
-from app.models.alert import AlertResponse
-from app.services.alert_service import alert_service
+from models.alert import AlertResponse
+from services.alert_service import alert_service
 
 router = APIRouter(prefix="/alerts", tags=["alerts"])
 
