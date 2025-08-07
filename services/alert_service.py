@@ -7,7 +7,7 @@ from app.database.connection import execute_query, execute_insert
 class AlertService:
     SPEED_LIMIT = 80.0  # km/h , taken as default speed limit
     LOW_FUEL_THRESHOLD = 15.0  # taken as default low fuel/battery threshold percentage
-    
+
     @staticmethod
     def process_telemetry_alerts(telemetry_data) -> List[Alert]:
         alerts = []
